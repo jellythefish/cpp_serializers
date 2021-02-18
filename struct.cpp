@@ -3,69 +3,69 @@
 #include <ctime>
 #include <iostream>
 
-using namespace std;
-
-string generateRandomString(size_t size) {
-    string res;
+std::string GenerateRandomString(size_t size) {
+    std::string res;
     for (size_t i = 0; i < size; ++i) {
-        char c = ' ' + rand() % 95; // random char from ascii 32 - ' ' to 126 - '~'
+        char c = (char) (' ' + rand() % 95); // random char from ascii 32 - ' ' to 126 - '~'
         res += c;
     }
     return res;
 }
 
-void fillVector(vector<int>& v, size_t vec_size) {
+void FillVector(std::vector<int>& v, size_t vec_size) {
     for (size_t i = 0; i < vec_size; ++i) {
         v.push_back(rand() % INT_MAX);
     }
 }
 
-void fillMap(map<string, string>& m, size_t map_size, size_t stringSize) {
+void FillMap(std::map<std::string, std::string>& m, size_t map_size, size_t string_size) {
     for (size_t i = 0; i < map_size; ++i) {
-        m[generateRandomString(stringSize)] = generateRandomString(stringSize);
+        m[GenerateRandomString(string_size)] = GenerateRandomString(string_size);
     }
 }
 
-void fillMapMap(map<string, map<string, int>>& m, size_t map_size, size_t nested_map_size, size_t stringSize) {
+void FillMapMap(std::map<std::string, std::map<std::string, int>>& m,
+                size_t map_size, size_t nested_map_size, size_t string_size) {
     for (size_t i = 0; i < map_size; ++i) {
-        map<string, int> p;
+        std::map<std::string, int> p;
         for (size_t j = 0; j < nested_map_size; ++j) {
-            p[generateRandomString(stringSize)] = rand() % INT_MAX;
+            p[GenerateRandomString(string_size)] = rand() % INT_MAX;
         }
-        m[generateRandomString(stringSize)] = p;
+        m[GenerateRandomString(string_size)] = p;
     }
 }
 
-void fillMapVectorMap(map<string, vector<map<string,string>>>& m,
-                      size_t map_size, size_t vector_size, size_t second_map_size, size_t stringSize) {
+void FillMapVectorMap(std::map<std::string, std::vector<std::map<std::string, std::string>>>& m,
+                      size_t map_size, size_t vector_size, size_t second_map_size, size_t string_size) {
     for (size_t i = 0; i < map_size; ++i) {
-        vector<map<string, string>> v;
+        std::vector<std::map<std::string, std::string>> v;
         for (size_t j = 0; j < vector_size; ++j) {
-            map<string, string> second_map;
-            fillMap(second_map, second_map_size, stringSize);
+            std::map<std::string, std::string> second_map;
+            FillMap(second_map, second_map_size, string_size);
             v.push_back(second_map);
         }
-        m[generateRandomString(stringSize)] = v;
+        m[GenerateRandomString(string_size)] = v;
     }
 }
 
-DataStruct generateStruct(StructSize size) {
+DataStruct GenerateStruct(StructSize size) {
+    // TODO: to change randomization method later
     srand(time(nullptr)); // use current time as seed for random generator
-    DataStruct dataStruct;
-    dataStruct.str = "Test string: Hello From Slava!";
-    dataStruct.int_num = 42;
-    dataStruct.double_num = 3.1415926;
-    size_t stringSize, vecSize, mapSize, nestedMapSize;
+    DataStruct data_struct;
+    data_struct.str = "Test string: Hello From Slava!";
+    data_struct.int_num = 42;
+    data_struct.double_num = 3.1415926;
+    size_t string_size, vec_size, map_size, nested_map_size;
     if (size == StructSize::Small) { // configuring size for different scale of D
-        stringSize = 20, vecSize = 40, mapSize = 80, nestedMapSize = 15;
+        string_size = 20, vec_size = 40, map_size = 80, nested_map_size = 15;
     } else if (size == StructSize::Medium) {
-        stringSize = 100, vecSize = 130, mapSize = 50, nestedMapSize = 30;
-    } else if (size == StructSize::Large) {
-        stringSize = 200, vecSize = 200, mapSize = 100, nestedMapSize = 50;
+        string_size = 100, vec_size = 130, map_size = 50, nested_map_size = 30;
+    } else {
+        string_size = 200, vec_size = 200, map_size = 100, nested_map_size = 50;
     }
-    fillVector(dataStruct.v_int, vecSize);
-    fillMap(dataStruct.map_, mapSize, stringSize);
-    fillMapMap(dataStruct.map_map, mapSize, nestedMapSize, stringSize);
-    fillMapVectorMap(dataStruct.map_vector_map, mapSize, vecSize, nestedMapSize, stringSize);
-    return dataStruct;
+    FillVector(data_struct.v_int, vec_size);
+    FillMap(data_struct.map_str_str, map_size, string_size);
+    FillMapMap(data_struct.map_map, map_size, nested_map_size, string_size);
+    FillMapVectorMap(data_struct.map_vector_map, map_size, vec_size, nested_map_size, string_size);
+    return data_struct;
 }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERIALIZATION_STRUCT_H_
+#define SERIALIZATION_STRUCT_H_
 
 #include <vector>
 #include <map>
@@ -14,12 +15,12 @@ struct DataStruct {
     int int_num;
     double double_num;
     std::vector<int> v_int;
-    std::map<std::string, std::string> map_;
+    std::map<std::string, std::string> map_str_str;
     std::map<std::string, std::map<std::string, int>> map_map;
-    std::map<std::string, std::vector<std::map<std::string,std::string>>> map_vector_map;
+    std::map<std::string, std::vector<std::map<std::string, std::string>>> map_vector_map;
 };
 
-DataStruct generateStruct(StructSize size);
+DataStruct GenerateStruct(StructSize size);
 
 /* Example for DataStruct
 {
@@ -51,3 +52,5 @@ DataStruct generateStruct(StructSize size);
         ]
     }
 } */
+
+#endif // SERIALIZATION_STRUCT_H_
