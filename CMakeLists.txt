@@ -3,8 +3,8 @@ project(serialization)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(serialization main.cpp struct.cpp serializer.cpp
-        struct.h serializer.h)
+add_executable(serialization main.cpp serializer.h struct.cpp struct.h boost_serialization/boost_serializer.cpp
+        boost_serialization/serialize.h)
 
 # importing BOOST library
 set(Boost_INCLUDE_DIR "C:/Program Files/boost/include")

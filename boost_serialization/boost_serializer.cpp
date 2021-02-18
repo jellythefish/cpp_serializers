@@ -1,4 +1,5 @@
-#include "serializer.h"
+#include "serialize.h"
+#include "../serializer.h"
 
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
