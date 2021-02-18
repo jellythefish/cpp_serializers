@@ -2,6 +2,7 @@
 #define SERIALIZATION_SERIALIZER_H_
 
 #include "struct.h"
+#include "boost_serialization/serialize.h"
 
 #include <fstream>
 #include <sstream>
