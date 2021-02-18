@@ -1,7 +1,7 @@
 #ifndef SERIALIZATION_BOOST_SERIALIZATION_BOOST_SERIALIZE_H_
 #define SERIALIZATION_BOOST_SERIALIZATION_BOOST_SERIALIZE_H_
 
-#include "../struct.h"
+#include "../struct.hpp"
 
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/vector.hpp>
