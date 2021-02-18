@@ -1,4 +1,4 @@
-#include "struct.h"
+#include "struct.hpp"
 
 #include <ctime>
 #include <iostream>
@@ -46,6 +46,46 @@ void FillMapVectorMap(std::map<std::string, std::vector<std::map<std::string, st
         }
         m[GenerateRandomString(string_size)] = v;
     }
+}
+
+DataStruct GetSimpleStruct() {
+    DataStruct data_struct;
+    data_struct.str = "Hello From Slava!";
+    data_struct.int_num = 42;
+    data_struct.double_num = 3.1415926;
+    data_struct.v_int = std::vector<int>({1, 2, 3, 4, 5});
+    data_struct.map_str_str = std::map<std::string, std::string>
+    {
+        {"statusCode", "200"},
+        {"message", "i am ok"}
+    };
+    data_struct.map_map = std::map<std::string, std::map<std::string, int>>
+    {
+        {"Jack",
+            {{"age", 25}, {"birthYear", 1996}}
+        },
+        {"Mary",
+            {{"age", 22}, {"birthYear", 1999}}
+        }
+    };
+    data_struct.map_vector_map = std::map<std::string, std::vector<std::map<std::string, std::string>>>
+    {
+        {"requests",
+            {
+                {{"method", "POST"}, {"data", "post it"}},
+                {{"method", "GET"}, {"data", "get me some"}},
+                {{"method", "PUT"}, {"data", "put it or die"}}
+            }
+        },
+        { "responses",
+            {
+                {{"statusCode", "400"}, {"message", "loh"}},
+                {{"statusCode", "200"}, {"message", "ok, boy"}},
+                {{"statusCode", "418"}, {"message", "I'm a teapot"}}
+            }
+        }
+    };
+    return data_struct;
 }
 
 DataStruct GenerateStruct(StructSize size) {
