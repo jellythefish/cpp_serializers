@@ -1,10 +1,6 @@
-cmake-build-debug/
-
 .idea/
 
-
+cmake-build-debug/
 
 # files of serialized data
-demofile.xml
-demofile.bin
-demofile.txt
+datafiles/
