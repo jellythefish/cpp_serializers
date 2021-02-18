@@ -3,55 +3,75 @@
 #include <sstream>
 #include <functional>
 
-#include "serializer.h"
+#include "serializer.hpp"
+#include "tabulate/tabulate.hpp"
 
-enum class SerializationType {
-    RAM,
-    Disk
+struct Entry {
+    std::string type;
+    std::string operation;
+    std::string place;
 };
 
-// example function for profile()
-void do_work() {
-    for (uint64_t i = 0; i < 10000000000; ++i) {}
-}
-
-void profile(void (Serializer::*function)(), Serializer& obj, SerializationType st, const std::string& desc) {
+void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, tabulate::Table& t) {
     clock_t time;
     time = clock();
     (obj.*function)(); // calling function which is a non-static method of class Serializer
     double diff = clock() - time;
     size_t dataSize;
-    if (st == SerializationType::RAM) {
+    if (e.place == "RAM") {
         dataSize = obj.GetDataSize();
     } else {
         std::ifstream in_file(obj.GetFilename(), std::ios::binary);
         in_file.seekg(0, std::ios::end);
         dataSize = in_file.tellg();
     }
-    std::cout << desc << " took "<< diff / (CLOCKS_PER_SEC / 1000)  << " ms/" << diff / CLOCKS_PER_SEC << " s"
-         << " and " << dataSize << " b/" << dataSize / 1024 << " Kb/" << dataSize / (1024 * 1024) << " Mb." << std::endl;
+    std::stringstream time_ss, memory_ss;
+    time_ss << diff / (CLOCKS_PER_SEC / 1000)  << " ms/" << diff / CLOCKS_PER_SEC << " s";
+    memory_ss << dataSize << " b/" << dataSize / 1024 << " Kb/" << dataSize / (1024 * 1024) << " Mb";
+    t.add_row({{e.type, e.operation, e.place, time_ss.str(), memory_ss.str()}});
 }
 
 int main() {
     std::cout << "Generating Data Structure...\r";
-    DataStruct dataStruct = GenerateStruct(StructSize::Small); // Small/Medium/Large
-    Serializer bs(dataStruct);
+//    DataStruct data_struct = GetSimpleStruct(); // Small/Medium/Large
+    DataStruct data_struct = GenerateStruct(StructSize::Large); // Small/Medium/Large
+    Serializer bs(data_struct);
     std::cout << "Generating Data Structure...OK" << std::endl;
 
-    std::cout << "Serialization started..." << std::endl;
-    profile(&Serializer::SerializeBinary, bs, SerializationType::RAM, "Serialization of Binary:");
-    profile(&Serializer::DeserializeBinary, bs, SerializationType::RAM, "Deserialization of Binary:");
-    profile(&Serializer::SerializeXML, bs, SerializationType::RAM, "Serialization of XML:");
-    profile(&Serializer::DeserializeXML, bs, SerializationType::RAM, "Deserialization of XML:");
-    profile(&Serializer::SerializeText, bs, SerializationType::RAM, "Serialization of Raw Text:");
-    profile(&Serializer::DeserializeText, bs, SerializationType::RAM, "Deserialization of Raw Text:");
+    // configuring beautiful output magic :)
+    tabulate::Table table_info;
+    table_info.add_row({"Type", "Operation", "Place", "Time", "Memory"});
+    table_info.format().font_align(tabulate::FontAlign::center);
+    for (size_t i = 0; i < 5; ++i) {
+        table_info[0][i].format()
+            .font_align(tabulate::FontAlign::center)
+            .font_color(tabulate::Color::grey)
+            .font_style({tabulate::FontStyle::bold})
+            .font_background_color(tabulate::Color::white);
+    }
 
-    profile(&Serializer::SerializeBinaryToFile, bs, SerializationType::Disk, "Serialization of Binary to file:");
-    profile(&Serializer::DeserializeBinaryFromFile, bs, SerializationType::Disk, "Deserialization of Binary from file:");
-    profile(&Serializer::SerializeTextToFile, bs, SerializationType::Disk, "Serialization of Raw Text to file:");
-    profile(&Serializer::DeserializeTextFromFile, bs, SerializationType::Disk, "Deserialization of Raw Text from file:");
-    profile(&Serializer::SerializeXMLToFile, bs, SerializationType::Disk, "Serialization of XML to file:");
-    profile(&Serializer::DeserializeXMLFromFile, bs, SerializationType::Disk, "Deserialization of XML from file:");
+    std::cout << "Serialization running...\r";
+    profile(&Serializer::SerializeBinary, bs, {"Binary", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeBinary, bs, {"Binary", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeXML, bs, {"XML", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeXML, bs, {"XML", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeJSON, bs, {"JSON", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeJSON, bs, {"JSON", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeText, bs, {"Raw text", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeText, bs, {"Raw text", "Deserialization", "RAM"}, table_info);
+
+    profile(&Serializer::SerializeBinaryToFile, bs, {"Binary", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeXMLToFile, bs, {"XML", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeXMLFromFile, bs, {"XML", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeJSONToFile, bs,{"JSON", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeJSONFromFile, bs,{"JSON", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeTextToFile, bs, {"Raw text", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeTextFromFile, bs, {"Raw text", "Deserialization", "File"}, table_info);
+
+    // TODO to implement progress bar
+    std::cout << "Serialization running...OK" << std::endl;
+    std::cout << table_info << std::endl;
     std::cout << "Serialization finished." << std::endl;
     return 0;
 }
