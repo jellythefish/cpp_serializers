@@ -36,4 +36,5 @@ RUN cd cpp_serialization_methods \
   && cd build \
   && cmake .. \
   && make
+WORKDIR /usr/src/app/cpp_serialization_methods/build
 CMD ["./serialization"]
