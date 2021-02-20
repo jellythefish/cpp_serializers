@@ -4,9 +4,7 @@ cmake-build-debug/
 build/
 
 # files of serialized data
-datafiles/
-
-
+datafiles/demofile*
 
 # protobufs stubs
 *.pb.cc
