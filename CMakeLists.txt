@@ -9,9 +9,18 @@ set(SOURCE main.cpp struct.cpp serializer.cpp)
 set(BOOST_SER boost_serialization/boost_serializer.cpp)
 set(BOOST_JSON boost_json/boost_json.cpp)
 
-# importing include single-header files
-include_directories(include)
-include_directories(".") # for making root headers visible
+# importing Tabulate for pretty-printing results
+include(FetchContent)
+FetchContent_Declare(
+        tabulate
+        GIT_REPOSITORY https://github.com/p-ranav/tabulate
+)
+FetchContent_MakeAvailable(tabulate)
+include_directories(${tabulate_SOURCE_DIR}/include)
+
+
+# for making root headers visible
+include_directories(".")
 
 add_executable(${PROJECT_NAME} ${SOURCE}
         ${BOOST_SER} ${BOOST_JSON})
@@ -28,5 +37,4 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-
 
