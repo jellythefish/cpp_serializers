@@ -1,7 +1,7 @@
 #ifndef SERIALIZATION_BOOST_JSON_BOOST_JSON_H_
 #define SERIALIZATION_BOOST_JSON_BOOST_JSON_H_
 
-#include "../struct.hpp"
+#include "struct.hpp"
 
 #include <boost/json/src.hpp>
 

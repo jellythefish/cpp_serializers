@@ -4,3 +4,10 @@ cmake-build-debug/
 
 # files of serialized data
 datafiles/
+
+# protobufs stubs
+*.pb.cc
+*.ph.h
+
+# docker shell scripts for myself
+docker*.sh

@@ -1,5 +1,5 @@
 #include "boost_serializer.hpp"
-#include "../serializer.hpp"
+#include "serializer.hpp"
 
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
