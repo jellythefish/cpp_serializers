@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include <iostream>
+#include <climits>
 
 std::string GenerateRandomString(size_t size) {
     std::string res;
