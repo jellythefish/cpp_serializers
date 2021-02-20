@@ -39,7 +39,7 @@ private:
     std::ifstream ifs; // for deserialization from file
     const DataStruct& data_struct;
 
-    std::string filepath = "C:/Users/Slava/Desktop/serialization/datafiles/";
+    std::string filepath = "../datafiles/";
     std::string filename; // is defined in class methods
 };
 
