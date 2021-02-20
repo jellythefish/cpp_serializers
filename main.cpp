@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "serializer.hpp"
-#include "tabulate/tabulate.hpp"
+#include <tabulate/table.hpp>
 
 struct Entry {
     std::string type;
@@ -32,9 +32,9 @@ void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, ta
 }
 
 int main() {
-    std::cout << "Generating Data Structure...\r";
+    std::cout << "Generating Data Structure...\r" << std::flush;
 //    DataStruct data_struct = GetSimpleStruct(); // Small/Medium/Large
-    DataStruct data_struct = GenerateStruct(StructSize::Large); // Small/Medium/Large
+    DataStruct data_struct = GenerateStruct(StructSize::Medium); // Small/Medium/Large
     Serializer bs(data_struct);
     std::cout << "Generating Data Structure...OK" << std::endl;
 
@@ -50,7 +50,7 @@ int main() {
             .font_background_color(tabulate::Color::white);
     }
 
-    std::cout << "Serialization running...\r";
+    std::cout << "Serialization running...\r" << std::flush;
     profile(&Serializer::SerializeBinary, bs, {"Binary", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeBinary, bs, {"Binary", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeXML, bs, {"XML", "Serialization", "RAM"}, table_info);
