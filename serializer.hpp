@@ -4,8 +4,26 @@
 #include "struct.hpp"
 #include "data_struct.pb.h"
 
+#include "avro/Encoder.hh"
+#include "avro/Decoder.hh"
+
 #include <fstream>
 #include <sstream>
+#include <memory>
+
+enum SerializerType {
+    Binary,
+    XML,
+    Text,
+    JSON,
+    Protobuf,
+    Avro
+};
+
+enum SerializerMode {
+    RAM,
+    File
+};
 
 class Serializer {
 public:
@@ -36,8 +54,12 @@ public:
     void SerializeProtobufToFile();
     void DeserializeProtobufFromFile();
 
+    void SerializeAvro();
+    void DeserializeAvro();
+    void SerializeAvroToFile();
+    void DeserializeAvroFromFile();
+
     size_t GetDataSize() const;
-    std::string GetFilename() const;
 
 private:
     std::stringstream ss; // a memory buffer for serialized data
@@ -45,6 +67,15 @@ private:
     std::stringstream pb_ss; // separate for brotobufs, don't know why protobuf ser/deser breaks basic ss
     std::ofstream ofs; // for serialization to file
     std::ifstream ifs; // for deserialization from file
+
+    std::unique_ptr<avro::OutputStream> avro_os = avro::memoryOutputStream(); // avro output stream
+    std::unique_ptr<avro::InputStream> avro_is;
+    std::unique_ptr<avro::OutputStream> avro_of; // avro output stream
+    std::unique_ptr<avro::InputStream> avro_if; // avro output stream
+
+    SerializerType current_type;
+    SerializerMode current_mode;
+
     const DataStruct& data_struct;
     proto::DataStruct ds_message;
 
