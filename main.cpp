@@ -17,17 +17,10 @@ void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, ta
     time = clock();
     (obj.*function)(); // calling function which is a non-static method of class Serializer
     double diff = clock() - time;
-    size_t dataSize;
-    if (e.place == "RAM") {
-        dataSize = obj.GetDataSize();
-    } else {
-        std::ifstream in_file(obj.GetFilename(), std::ios::binary);
-        in_file.seekg(0, std::ios::end);
-        dataSize = in_file.tellg();
-    }
+    size_t data_size = obj.GetDataSize();
     std::stringstream time_ss, memory_ss;
     time_ss << diff / (CLOCKS_PER_SEC / 1000)  << " ms/" << diff / CLOCKS_PER_SEC << " s";
-    memory_ss << dataSize << " b/" << dataSize / 1024 << " Kb/" << dataSize / (1024 * 1024) << " Mb";
+    memory_ss << data_size << " b/" << data_size / 1024 << " Kb/" << data_size / (1024 * 1024) << " Mb";
     t.add_row({{e.type, e.operation, e.place, time_ss.str(), memory_ss.str()}});
 }
 
@@ -55,23 +48,27 @@ int main() {
     profile(&Serializer::DeserializeBinary, bs, {"Binary", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeXML, bs, {"XML", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeXML, bs, {"XML", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeJSON, bs, {"JSON", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeJSON, bs, {"JSON", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeText, bs, {"Raw text", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeText, bs, {"Raw text", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeJSON, bs, {"JSON", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeJSON, bs, {"JSON", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeProtobuf, bs, {"Protobuf", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeProtobuf, bs, {"Protobuf", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeAvro, bs, {"Avro", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeAvro, bs, {"Avro", "Deserialization", "RAM"}, table_info);
 
     profile(&Serializer::SerializeBinaryToFile, bs, {"Binary", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeXMLToFile, bs, {"XML", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeXMLFromFile, bs, {"XML", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeJSONToFile, bs,{"JSON", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeJSONFromFile, bs,{"JSON", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeTextToFile, bs, {"Raw text", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeTextFromFile, bs, {"Raw text", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeJSONToFile, bs,{"JSON", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeJSONFromFile, bs,{"JSON", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeProtobufToFile, bs, {"Protobuf", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeProtobufFromFile, bs, {"Protobuf", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeAvroToFile, bs, {"Avro", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeAvroFromFile, bs, {"Avro", "Deserialization", "File"}, table_info);
 
     // TODO to implement progress bar
     std::cout << "Serialization running...OK" << std::endl;

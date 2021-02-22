@@ -4,17 +4,23 @@
 #include <iostream>
 
 void Serializer::SerializeJSON() {
+    current_type = SerializerType::JSON;
+    current_mode = SerializerMode::RAM;
     json::value jv = json::value_from(data_struct);
     ss.str(""); // clearing string stream buffer 0 ms time
     ss << jv;
 }
 
 void Serializer::DeserializeJSON() {
+    current_type = SerializerType::JSON;
+    current_mode = SerializerMode::RAM;
     json::value jv = json::parse(ss.str());
     DataStruct data_struct_new(json::value_to<DataStruct>(jv));
 }
 
 void Serializer::SerializeJSONToFile() {
+    current_type = SerializerType::JSON;
+    current_mode = SerializerMode::File;
     filename = "demofile.json";
     ofs.open((filepath + filename).c_str());
     if (!ofs.is_open())
@@ -25,6 +31,8 @@ void Serializer::SerializeJSONToFile() {
 }
 
 void Serializer::DeserializeJSONFromFile() {
+    current_type = SerializerType::JSON;
+    current_mode = SerializerMode::File;
     filename = "demofile.json";
     ifs.open((filepath + filename).c_str());
     if (!ifs.is_open()) {

@@ -9,6 +9,8 @@
 #include <boost/archive/text_iarchive.hpp>
 
 void Serializer::SerializeBinary() {
+    current_type = SerializerType::Binary;
+    current_mode = SerializerMode::RAM;
     ss.str(""); // clearing string stream buffer 0 ms time
     {
         boost::archive::binary_oarchive oa(ss);
@@ -17,6 +19,8 @@ void Serializer::SerializeBinary() {
 }
 
 void Serializer::DeserializeBinary() {
+    current_type = SerializerType::Binary;
+    current_mode = SerializerMode::RAM;
     DataStruct data_struct_new;
     {
         boost::archive::binary_iarchive ia(ss);
@@ -25,6 +29,8 @@ void Serializer::DeserializeBinary() {
 }
 
 void Serializer::SerializeXML() {
+    current_type = SerializerType::XML;
+    current_mode = SerializerMode::RAM;
     ss.str("");
     {
         boost::archive::xml_oarchive oa(ss);
@@ -33,6 +39,8 @@ void Serializer::SerializeXML() {
 }
 
 void Serializer::DeserializeXML() {
+    current_type = SerializerType::XML;
+    current_mode = SerializerMode::RAM;
     DataStruct data_struct_new;
     {
         boost::archive::xml_iarchive ia(ss);
@@ -41,6 +49,8 @@ void Serializer::DeserializeXML() {
 }
 
 void Serializer::SerializeText() {
+    current_type = SerializerType::Text;
+    current_mode = SerializerMode::RAM;
     ss.str("");
     {
         boost::archive::text_oarchive oa(ss);
@@ -49,6 +59,8 @@ void Serializer::SerializeText() {
 }
 
 void Serializer::DeserializeText() {
+    current_type = SerializerType::Text;
+    current_mode = SerializerMode::RAM;
     DataStruct data_struct_new;
     {
         boost::archive::text_iarchive ia(ss);
@@ -57,6 +69,8 @@ void Serializer::DeserializeText() {
 }
 
 void Serializer::SerializeBinaryToFile() {
+    current_type = SerializerType::Binary;
+    current_mode = SerializerMode::File;
     filename = "demofile.bin";
     ofs.open((filepath + filename).c_str(), std::ios::binary);
     if (!ofs.is_open())
@@ -69,6 +83,8 @@ void Serializer::SerializeBinaryToFile() {
 }
 
 void Serializer::DeserializeBinaryFromFile() {
+    current_type = SerializerType::Binary;
+    current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.bin";
     ifs.open((filepath + filename).c_str(), std::ios::binary);
@@ -82,6 +98,8 @@ void Serializer::DeserializeBinaryFromFile() {
 }
 
 void Serializer::SerializeXMLToFile() {
+    current_type = SerializerType::XML;
+    current_mode = SerializerMode::File;
     filename = "demofile.xml";
     ofs.open((filepath + filename).c_str());
     if (!ofs.is_open())
@@ -94,6 +112,8 @@ void Serializer::SerializeXMLToFile() {
 }
 
 void Serializer::DeserializeXMLFromFile() {
+    current_type = SerializerType::XML;
+    current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.xml";
     ifs.open((filepath + filename).c_str());
@@ -107,6 +127,8 @@ void Serializer::DeserializeXMLFromFile() {
 }
 
 void Serializer::SerializeTextToFile() {
+    current_type = SerializerType::Text;
+    current_mode = SerializerMode::File;
     filename = "demofile.txt";
     ofs.open((filepath + filename).c_str());
     if (!ofs.is_open())
@@ -119,6 +141,8 @@ void Serializer::SerializeTextToFile() {
 }
 
 void Serializer::DeserializeTextFromFile() {
+    current_type = SerializerType::Text;
+    current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.txt";
     ifs.open((filepath + filename).c_str());
