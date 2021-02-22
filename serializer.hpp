@@ -2,6 +2,7 @@
 #define SERIALIZATION_SERIALIZER_H_
 
 #include "struct.hpp"
+#include "data_struct.pb.h"
 
 #include <fstream>
 #include <sstream>
@@ -30,14 +31,22 @@ public:
     void SerializeJSONToFile();
     void DeserializeJSONFromFile();
 
+    void SerializeProtobuf();
+    void DeserializeProtobuf();
+    void SerializeProtobufToFile();
+    void DeserializeProtobufFromFile();
+
     size_t GetDataSize() const;
     std::string GetFilename() const;
 
 private:
     std::stringstream ss; // a memory buffer for serialized data
+    // TODO to fix this
+    std::stringstream pb_ss; // separate for brotobufs, don't know why protobuf ser/deser breaks basic ss
     std::ofstream ofs; // for serialization to file
     std::ifstream ifs; // for deserialization from file
     const DataStruct& data_struct;
+    proto::DataStruct ds_message;
 
     std::string filepath = "../datafiles/";
     std::string filename; // is defined in class methods

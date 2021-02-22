@@ -110,3 +110,42 @@ DataStruct GenerateStruct(StructSize size) {
     FillMapVectorMap(data_struct.map_vector_map, map_size, vec_size, nested_map_size, string_size);
     return data_struct;
 }
+
+proto::DataStruct GenerateProtoMessage(const DataStruct& data_struct) {
+    proto::DataStruct ds_message;
+    ds_message.set_str(data_struct.str);
+    ds_message.set_int_num(data_struct.int_num);
+    ds_message.set_double_num(data_struct.double_num);
+    *ds_message.mutable_v_int() = {data_struct.v_int.begin(), data_struct.v_int.end()};
+
+    for (const auto& [key, value] : data_struct.map_str_str) {
+        proto::DataStruct::BasicMap* bm = ds_message.add_map_str_str();
+        bm->set_key(key);
+        bm->set_value(value);
+    }
+
+    for (const auto& [key, nest_map] : data_struct.map_map) {
+        proto::DataStruct::MapMap* mm = ds_message.add_map_map();
+        mm->set_key(key);
+        for (const auto& [second_key, value] : nest_map) {
+            proto::DataStruct::SecondBasicMap* bm_tmp = mm->add_value();
+            bm_tmp->set_key(second_key);
+            bm_tmp->set_value(value);
+        }
+    }
+
+    for (const auto& [key, vec_map] : data_struct.map_vector_map) {
+        proto::DataStruct::MapVectorMap* vmv = ds_message.add_map_vector_map();
+        vmv->set_key(key);
+        for (const auto& map_ : vec_map) {
+            proto::DataStruct::VectorMap* vm = vmv->add_value();
+            for (const auto& [second_key, value] : map_) {
+                proto::DataStruct::BasicMap* bm_tmp_ = vm->add_vm();
+                bm_tmp_->set_key(second_key);
+                bm_tmp_->set_value(value);
+            }
+        }
+    }
+
+    return ds_message;
+}

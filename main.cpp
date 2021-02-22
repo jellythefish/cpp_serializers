@@ -33,8 +33,8 @@ void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, ta
 
 int main() {
     std::cout << "Generating Data Structure...\r" << std::flush;
-//    DataStruct data_struct = GetSimpleStruct(); // Small/Medium/Large
-    DataStruct data_struct = GenerateStruct(StructSize::Medium); // Small/Medium/Large
+//    DataStruct data_struct = GetSimpleStruct();
+    DataStruct data_struct = GenerateStruct(StructSize::Large); // Small/Medium/Large
     Serializer bs(data_struct);
     std::cout << "Generating Data Structure...OK" << std::endl;
 
@@ -59,6 +59,8 @@ int main() {
     profile(&Serializer::DeserializeJSON, bs, {"JSON", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeText, bs, {"Raw text", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeText, bs, {"Raw text", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeProtobuf, bs, {"Protobuf", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeProtobuf, bs, {"Protobuf", "Deserialization", "RAM"}, table_info);
 
     profile(&Serializer::SerializeBinaryToFile, bs, {"Binary", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary", "Deserialization", "File"}, table_info);
@@ -68,6 +70,8 @@ int main() {
     profile(&Serializer::DeserializeJSONFromFile, bs,{"JSON", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeTextToFile, bs, {"Raw text", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeTextFromFile, bs, {"Raw text", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeProtobufToFile, bs, {"Protobuf", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeProtobufFromFile, bs, {"Protobuf", "Deserialization", "File"}, table_info);
 
     // TODO to implement progress bar
     std::cout << "Serialization running...OK" << std::endl;

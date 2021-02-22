@@ -1,0 +1,49 @@
+syntax= "proto3";
+
+package proto;
+
+message DataStruct {
+    string str = 1;
+    sint32 int_num = 2; // more efficiently encode negative numbers than int32
+    double double_num = 3;
+    repeated sint32 v_int = 4;
+    repeated BasicMap map_str_str = 5;
+    repeated MapMap map_map = 6;
+    repeated MapVectorMap map_vector_map = 7;
+
+    message BasicMap {
+        string key = 1;
+        string value = 2;
+    }
+
+    message SecondBasicMap {
+        string key = 1;
+        sint32 value = 2;
+    }
+
+    message MapMap {
+        string key = 1;
+        repeated SecondBasicMap value = 2;
+    }
+
+    message VectorMap {
+        repeated BasicMap vm = 1;
+    }
+
+    message MapVectorMap {
+        string key = 1;
+        repeated VectorMap value = 2;
+    }
+}
+
+/* From
+struct DataStruct {
+    std::string str;
+    int int_num;
+    double double_num;
+    std::vector<int> v_int;
+    std::map<std::string, std::string> map_str_str;
+    std::map<std::string, std::map<std::string, int>> map_map;
+    std::map<std::string, std::vector<std::map<std::string, std::string>>> map_vector_map;
+};
+*/

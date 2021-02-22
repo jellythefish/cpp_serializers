@@ -8,8 +8,6 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-Serializer::Serializer(const DataStruct& dataStruct) : data_struct(dataStruct) {}
-
 void Serializer::SerializeBinary() {
     ss.str(""); // clearing string stream buffer 0 ms time
     {

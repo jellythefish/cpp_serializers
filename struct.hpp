@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include "data_struct.pb.h"
 
 enum class StructSize {
     Small,
@@ -21,6 +22,8 @@ struct DataStruct {
 };
 
 DataStruct GenerateStruct(StructSize size);
+proto::DataStruct GenerateProtoMessage(const DataStruct& data_struct);
+
 DataStruct GetSimpleStruct();
 
 /* Example for DataStruct
