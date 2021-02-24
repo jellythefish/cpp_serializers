@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <map>
+
 #include "data_struct.pb.h"
+#include <msgpack.hpp>
 
 enum class StructSize {
     Small,
@@ -19,6 +21,8 @@ struct DataStruct {
     std::map<std::string, std::string> map_str_str;
     std::map<std::string, std::map<std::string, int>> map_map;
     std::map<std::string, std::vector<std::map<std::string, std::string>>> map_vector_map;
+
+    MSGPACK_DEFINE(str, int_num, double_num, v_int, map_str_str, map_map, map_vector_map); // For MessagePack
 };
 
 DataStruct GenerateStruct(StructSize size);
