@@ -61,6 +61,17 @@ RUN cd /tmp && wget https://apache-mirror.rbc.ru/pub/apache/avro/avro-1.10.1/avr
     && cd /tmp \
     && rm -rf avro-src-1.10.1
 
+# Installing YAML parser and emitter library
+RUN cd /tmp && git clone https://github.com/jbeder/yaml-cpp \
+    && cd yaml-cpp \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DYAML_BUILD_SHARED_LIBS=ON \
+    && make \
+    && make install \
+    && cd /tmp \
+    && rm -rf yaml-cpp
+
 ##############################################################################
 
 # A folder for developing and debbuging: for adding volume of sources in host project folder

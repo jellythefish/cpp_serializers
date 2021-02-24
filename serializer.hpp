@@ -7,6 +7,8 @@
 #include "avro/Encoder.hh"
 #include "avro/Decoder.hh"
 
+#include "yaml-cpp/yaml.h"
+
 #include <fstream>
 #include <sstream>
 #include <memory>
@@ -17,7 +19,8 @@ enum SerializerType {
     Text,
     JSON,
     Protobuf,
-    Avro
+    Avro,
+    Yaml
 };
 
 enum SerializerMode {
@@ -59,6 +62,11 @@ public:
     void SerializeAvroToFile();
     void DeserializeAvroFromFile();
 
+    void SerializeYAML();
+    void DeserializeYAML();
+    void SerializeYAMLToFile();
+    void DeserializeYAMLFromFile();
+
     size_t GetDataSize() const;
 
 private:
@@ -72,6 +80,8 @@ private:
     std::unique_ptr<avro::InputStream> avro_is;
     std::unique_ptr<avro::OutputStream> avro_of; // avro output stream
     std::unique_ptr<avro::InputStream> avro_if; // avro output stream
+
+    YAML::Node yaml_node_out;
 
     SerializerType current_type;
     SerializerMode current_mode;

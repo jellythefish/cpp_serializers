@@ -27,7 +27,7 @@ void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, ta
 int main() {
     std::cout << "Generating Data Structure...\r" << std::flush;
 //    DataStruct data_struct = GetSimpleStruct();
-    DataStruct data_struct = GenerateStruct(StructSize::Large); // Small/Medium/Large
+    DataStruct data_struct = GenerateStruct(StructSize::Small); // Small/Medium/Large
     Serializer bs(data_struct);
     std::cout << "Generating Data Structure...OK" << std::endl;
 
@@ -44,8 +44,9 @@ int main() {
     }
 
     std::cout << "Serialization running...\r" << std::flush;
-    profile(&Serializer::SerializeBinary, bs, {"Binary", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeBinary, bs, {"Binary", "Deserialization", "RAM"}, table_info);
+
+    profile(&Serializer::SerializeBinary, bs, {"Binary\n(Boost)", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeBinary, bs, {"Binary\n(Boost)", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeXML, bs, {"XML", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeXML, bs, {"XML", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeText, bs, {"Raw text", "Serialization", "RAM"}, table_info);
@@ -56,9 +57,14 @@ int main() {
     profile(&Serializer::DeserializeProtobuf, bs, {"Protobuf", "Deserialization", "RAM"}, table_info);
     profile(&Serializer::SerializeAvro, bs, {"Avro", "Serialization", "RAM"}, table_info);
     profile(&Serializer::DeserializeAvro, bs, {"Avro", "Deserialization", "RAM"}, table_info);
+    profile(&Serializer::SerializeYAML, bs, {"YAML", "Serialization", "RAM"}, table_info);
+    profile(&Serializer::DeserializeYAML, bs, {"YAML", "Deserialization", "RAM"}, table_info);
 
-    profile(&Serializer::SerializeBinaryToFile, bs, {"Binary", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary", "Deserialization", "File"}, table_info);
+    table_info.add_row({"---------","---------","---------","---------","---------"});
+
+
+    profile(&Serializer::SerializeBinaryToFile, bs, {"Binary\n(Boost)", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary\n(Boost)", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeXMLToFile, bs, {"XML", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeXMLFromFile, bs, {"XML", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeTextToFile, bs, {"Raw text", "Serialization", "File"}, table_info);
@@ -69,6 +75,8 @@ int main() {
     profile(&Serializer::DeserializeProtobufFromFile, bs, {"Protobuf", "Deserialization", "File"}, table_info);
     profile(&Serializer::SerializeAvroToFile, bs, {"Avro", "Serialization", "File"}, table_info);
     profile(&Serializer::DeserializeAvroFromFile, bs, {"Avro", "Deserialization", "File"}, table_info);
+    profile(&Serializer::SerializeYAMLToFile, bs, {"YAML", "Serialization", "File"}, table_info);
+    profile(&Serializer::DeserializeYAMLFromFile, bs, {"YAML", "Deserialization", "File"}, table_info);
 
     // TODO to implement progress bar
     std::cout << "Serialization running...OK" << std::endl;

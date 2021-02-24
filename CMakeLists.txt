@@ -13,6 +13,7 @@ set(BOOST_SER boost_serialization/boost_serializer.cpp)
 set(BOOST_JSON boost_json/boost_json.cpp)
 set(PROTOBUF protobuf/protobuf_serializer.cpp)
 set(AVRO_SER avro/avro_serializer.cpp)
+set(YAML_SER yaml/yaml_serializer.cpp)
 
 # importing Tabulate for pretty-printing results
 include(FetchContent)
@@ -42,14 +43,18 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS protobuf/data_struct.proto) # Building protobuf stubs
 
 # importing Apache Avro
-set(Avro_INCLUDE_DIRS /usr/local/include/avro)
-set(Avro_LIBRARIES "/usr/local/lib/libavrocpp.so")
-include_directories(${Avro_INCLUDE_DIRS})
+add_library(Avro SHARED IMPORTED)
+find_library(Avro_LOCATION NAMES libavrocpp.so)
+set_target_properties(Avro PROPERTIES IMPORTED_LOCATION ${Avro_LOCATION})
+
+# importing YAML
+add_library(YAML SHARED IMPORTED)
+find_library(YAML_LOCATION NAMES libyaml-cpp.so)
+set_target_properties(YAML PROPERTIES IMPORTED_LOCATION ${YAML_LOCATION})
 
 add_executable(${PROJECT_NAME} ${SOURCE}
         ${BOOST_SER} ${BOOST_JSON} ${PROTOBUF} ${PROTO_SRCS} ${PROTO_HDRS}
-        ${AVRO_SER})
+        ${AVRO_SER} ${YAML_SER})
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${Protobuf_LIBRARIES}
-        ${Avro_LIBRARIES})
-
+        Avro YAML)

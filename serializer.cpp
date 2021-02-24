@@ -1,5 +1,7 @@
 #include "serializer.hpp"
 
+#include <sstream>
+
 Serializer::Serializer(const DataStruct& data_struct) :
     data_struct(data_struct),
     ds_message(GenerateProtoMessage(data_struct)) {}
@@ -16,6 +18,10 @@ size_t Serializer::GetDataSize() const {
                 return pb_ss.str().size();
             case SerializerType::Avro:
                 return avro_os->byteCount();
+            case SerializerType::Yaml:
+                std::stringstream tmp;
+                tmp << yaml_node_out;
+                return tmp.str().size();
         }
     } else {
         std::ifstream in_file(filepath + filename, std::ios::binary);
