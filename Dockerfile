@@ -34,7 +34,7 @@ RUN cd /tmp && wget http://downloads.sourceforge.net/project/boost/boost/1.75.0/
   && tar xfz boost_1_75_0.tar.gz \
   && rm boost_1_75_0.tar.gz \
   && cd boost_1_75_0 \
-  && ./bootstrap.sh --prefix=/usr/local --with-libraries=serialization,json,filesystem,iostreams,system,program_options,regex \
+  && ./bootstrap.sh --prefix=/usr/local --with-libraries=serialization,json,filesystem,iostreams,system,program_options,regex,chrono,timer \
   && ./b2 install \
   && cd /tmp \
   && rm -rf boost_1_75_0
@@ -71,6 +71,16 @@ RUN cd /tmp && git clone https://github.com/jbeder/yaml-cpp \
     && make install \
     && cd /tmp \
     && rm -rf yaml-cpp
+
+# Installing MessagePack Library
+RUN cd /tmp && git clone https://github.com/msgpack/msgpack-c.git \
+    && cd msgpack-c \
+    && git checkout cpp_master \
+    && cmake -DMSGPACK_CXX17=ON . \
+    && make \
+    && make install \
+    && cd /tmp \
+    && rm -rf msgpack-c
 
 ##############################################################################
 

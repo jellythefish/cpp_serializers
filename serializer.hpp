@@ -20,7 +20,8 @@ enum SerializerType {
     JSON,
     Protobuf,
     Avro,
-    Yaml
+    Yaml,
+    MsgPack
 };
 
 enum SerializerMode {
@@ -66,6 +67,11 @@ public:
     void DeserializeYAML();
     void SerializeYAMLToFile();
     void DeserializeYAMLFromFile();
+
+    void SerializeMsgPack();
+    void DeserializeMsgPack();
+    void SerializeMsgPackToFile();
+    void DeserializeMsgPackFromFile();
 
     size_t GetDataSize() const;
 

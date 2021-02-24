@@ -8,12 +8,14 @@ include_directories(".")
 
 set(SOURCE main.cpp struct.cpp serializer.cpp)
 
-# creating variables for methods of serialization
+# creating variables for project sources
 set(BOOST_SER boost_serialization/boost_serializer.cpp)
 set(BOOST_JSON boost_json/boost_json.cpp)
 set(PROTOBUF protobuf/protobuf_serializer.cpp)
 set(AVRO_SER avro/avro_serializer.cpp)
 set(YAML_SER yaml/yaml_serializer.cpp)
+set(MSGPACK_SER message_pack/msgpack_serializer.cpp)
+set(PROFILER util/profiler.cpp)
 
 # importing Tabulate for pretty-printing results
 include(FetchContent)
@@ -52,9 +54,12 @@ add_library(YAML SHARED IMPORTED)
 find_library(YAML_LOCATION NAMES libyaml-cpp.so)
 set_target_properties(YAML PROPERTIES IMPORTED_LOCATION ${YAML_LOCATION})
 
+# importing MessagePack
+include_directories("/usr/local/include/msgpack")
+
 add_executable(${PROJECT_NAME} ${SOURCE}
         ${BOOST_SER} ${BOOST_JSON} ${PROTOBUF} ${PROTO_SRCS} ${PROTO_HDRS}
-        ${AVRO_SER} ${YAML_SER})
+        ${AVRO_SER} ${YAML_SER} ${MSGPACK_SER} ${PROFILER})
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${Protobuf_LIBRARIES}
         Avro YAML)

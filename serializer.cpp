@@ -13,6 +13,7 @@ size_t Serializer::GetDataSize() const {
             case SerializerType::XML:
             case SerializerType::Text:
             case SerializerType::JSON:
+            case SerializerType::MsgPack:
                 return ss.str().size();
             case SerializerType::Protobuf:
                 return pb_ss.str().size();
