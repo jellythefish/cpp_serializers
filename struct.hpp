@@ -33,8 +33,8 @@ DataStruct GetSimpleStruct();
   "double_num": 3.1415926,
   "v_int": [1, 2, 3, 4, 5],
   "map_str_str": {
-    "statusCode": "200"
-    "message": "i am ok",
+    "statusCode": "200",
+    "message": "i am ok"
   },
   "map_map": {
     "Jack": {
@@ -49,30 +49,30 @@ DataStruct GetSimpleStruct();
   "map_vector_map": {
     "requests": [
       {
-        "method": "POST"
-        "data": "post it",
+        "method": "POST",
+        "data": "post it"
       },
       {
-        "method": "GET"
-        "data": "get me some",
+        "method": "GET",
+        "data": "get me some"
       },
       {
-        "method": "PUT"
-        "data": "put it or die",
+        "method": "PUT",
+        "data": "put it or die"
       }
     ],
     "responses": [
       {
-        "statusCode": "400"
-        "message": "loh",
+        "statusCode": "400",
+        "message": "loh"
       },
       {
-        "statusCode": "200"
-        "message": "ok, boy",
+        "statusCode": "200",
+        "message": "ok, boy"
       },
       {
-        "statusCode": "418"
-        "message": "I'm a teapot",
+        "statusCode": "418",
+        "message": "I'm a teapot"
       }
     ]
   }
