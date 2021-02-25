@@ -7,7 +7,7 @@
 std::string GenerateRandomString(size_t size) {
     std::string res;
     for (size_t i = 0; i < size; ++i) {
-        char c = (char) (' ' + rand() % 95); // random char from ascii 32 - ' ' to 126 - '~'
+        char c = (char) ('a' + rand() % 26); // random char from ascii 97 - 'a' to 122 - 'z'
         res += c;
     }
     return res;
