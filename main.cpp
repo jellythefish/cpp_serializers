@@ -5,10 +5,25 @@
 #include "serializer.hpp"
 #include "util/util.hpp"
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        throw std::invalid_argument("Wrong number of arguments.");
+    }
+    std::string size_argument = argv[1];
+    StructSize size;
+    if (size_argument == "small") {
+        size = StructSize::Small;
+    } else if (size_argument == "medium") {
+        size = StructSize::Medium;
+    } else if (size_argument == "large") {
+        size = StructSize::Large;
+    } else {
+        throw std::invalid_argument("Size argument is invalid.");
+    }
+
     std::cout << "Generating Data Structure...\r" << std::flush;
 //    DataStruct data_struct = GetSimpleStruct();
-    DataStruct data_struct = GenerateStruct(StructSize::Small); // Small/Medium/Large
+    DataStruct data_struct = GenerateStruct(size); // Small/Medium/Large
     Serializer bs(data_struct);
     std::cout << "Generating Data Structure...OK" << std::endl;
 
