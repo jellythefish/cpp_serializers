@@ -8,6 +8,7 @@ Serializer::Serializer(const DataStruct& data_struct) :
 
 size_t Serializer::GetDataSize() const {
     if (current_mode == SerializerMode::RAM) {
+        std::stringstream tmp;
         switch (current_type) {
             case SerializerType::Binary:
             case SerializerType::XML:
@@ -20,8 +21,7 @@ size_t Serializer::GetDataSize() const {
             case SerializerType::Avro:
                 return avro_os->byteCount();
             case SerializerType::Yaml:
-                std::stringstream tmp;
-                tmp << yaml_node_out;
+                tmp << tree;
                 return tmp.str().size();
         }
     } else {

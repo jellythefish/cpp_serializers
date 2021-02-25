@@ -7,7 +7,8 @@
 #include "avro/Encoder.hh"
 #include "avro/Decoder.hh"
 
-#include "yaml-cpp/yaml.h"
+#include <ryml_std.hpp>
+#include <ryml.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -87,7 +88,7 @@ private:
     std::unique_ptr<avro::OutputStream> avro_of; // avro output stream
     std::unique_ptr<avro::InputStream> avro_if; // avro output stream
 
-    YAML::Node yaml_node_out;
+    ryml::Tree tree;
 
     SerializerType current_type;
     SerializerMode current_mode;

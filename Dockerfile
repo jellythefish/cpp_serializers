@@ -61,16 +61,16 @@ RUN cd /tmp && wget https://apache-mirror.rbc.ru/pub/apache/avro/avro-1.10.1/avr
     && cd /tmp \
     && rm -rf avro-src-1.10.1
 
-# Installing YAML parser and emitter library
-RUN cd /tmp && git clone https://github.com/jbeder/yaml-cpp \
-    && cd yaml-cpp \
+# Installing Ryaml - Rapid YAML parser and emitter library
+RUN cd /tmp && git clone --recursive https://github.com/biojppm/rapidyaml \
+    && cd rapidyaml \
     && mkdir build \
     && cd build \
-    && cmake .. -DYAML_BUILD_SHARED_LIBS=ON \
+    && cmake .. \
     && make \
     && make install \
     && cd /tmp \
-    && rm -rf yaml-cpp
+    && rm -rf rapidyaml
 
 # Installing MessagePack Library
 RUN cd /tmp && git clone https://github.com/msgpack/msgpack-c.git \

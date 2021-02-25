@@ -51,7 +51,7 @@ set_target_properties(Avro PROPERTIES IMPORTED_LOCATION ${Avro_LOCATION})
 
 # importing YAML
 add_library(YAML SHARED IMPORTED)
-find_library(YAML_LOCATION NAMES libyaml-cpp.so)
+find_library(YAML_LOCATION NAMES libryml.a)
 set_target_properties(YAML PROPERTIES IMPORTED_LOCATION ${YAML_LOCATION})
 
 # importing MessagePack
