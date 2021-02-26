@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # dev method to run container with shell and sources located at source
-docker run --name cpp_serialization_methods --rm -v "C:\Users\Slava\Desktop\serialization":/usr/src/app/dev -it jellythefish/cpp_serializers /bin/bash
+docker run --name cpp_serializers --rm -v "C:\Users\Slava\Desktop\serialization":/usr/src/app/dev -it jellythefish/cpp_serializers /bin/bash
 
 # basic run (default - small 10)
 docker run --rm jellythefish/cpp_serializers
