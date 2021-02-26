@@ -13,7 +13,7 @@
 void Serializer::SerializeBinary() {
     current_type = SerializerType::Binary;
     current_mode = SerializerMode::RAM;
-    ss.str(""); // clearing string stream buffer 0 ms time
+    ss.clear(); ss.str(""); // resetting string stream buffer 0 ms time
     {
         boost::archive::binary_oarchive oa(ss);
         oa << data_struct;
@@ -33,7 +33,7 @@ void Serializer::DeserializeBinary() {
 void Serializer::SerializeXML() {
     current_type = SerializerType::XML;
     current_mode = SerializerMode::RAM;
-    ss.str("");
+    ss.clear(); ss.str("");
     {
         boost::archive::xml_oarchive oa(ss);
         oa << BOOST_SERIALIZATION_NVP(data_struct);
@@ -53,7 +53,7 @@ void Serializer::DeserializeXML() {
 void Serializer::SerializeText() {
     current_type = SerializerType::Text;
     current_mode = SerializerMode::RAM;
-    ss.str("");
+    ss.clear(); ss.str("");
     {
         boost::archive::text_oarchive oa(ss);
         oa << data_struct;

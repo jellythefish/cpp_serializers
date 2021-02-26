@@ -37,10 +37,9 @@ void Serializer::DeserializeYAMLFromFile() {
     std::ifstream ifs((filepath + filename).c_str());
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
-    std::stringstream buffer;
-    buffer << ifs.rdbuf();
-    ryml::Tree tree_new = ryml::parse(c4::to_csubstr(buffer.str()));
-
+    ss.clear(); ss.str("");;
+    ss << ifs.rdbuf();
+    ryml::Tree tree_new = ryml::parse(c4::to_csubstr(ss.str()));
     DataStruct data_struct_new;
     tree_new.rootref() >> data_struct_new;
 }

@@ -7,7 +7,7 @@
 void Serializer::SerializeMsgPack() {
     current_type = SerializerType::MsgPack;
     current_mode = SerializerMode::RAM;
-    ss.str("");
+    ss.clear(); ss.str("");
     msgpack::pack(ss, data_struct);
 }
 
@@ -37,9 +37,9 @@ void Serializer::DeserializeMsgPackFromFile() {
     std::ifstream ifs((filepath + filename).c_str(), std::ios::binary);
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
-    std::stringstream buffer;
-    buffer << ifs.rdbuf();
-    std::string str(buffer.str());
+    ss.clear(); ss.str("");
+    ss << ifs.rdbuf();
+    std::string str(ss.str());
     msgpack::object_handle oh = msgpack::unpack(str.data(), str.size());
     msgpack::object deserialized = oh.get();
     DataStruct data_struct_new = deserialized.as<DataStruct>();

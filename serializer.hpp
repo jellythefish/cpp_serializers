@@ -77,8 +77,6 @@ public:
 
 private:
     std::stringstream ss; // a memory buffer for serialized data
-    // TODO to fix this
-    std::stringstream pb_ss; // separate for brotobufs, don't know why protobuf ser/deser breaks basic ss
 
     std::unique_ptr<avro::OutputStream> avro_os = avro::memoryOutputStream(); // avro output stream
 
