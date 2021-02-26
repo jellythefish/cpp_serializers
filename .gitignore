@@ -9,6 +9,3 @@ datafiles/demofile*
 # protobufs stubs
 *.pb.cc
 *.ph.h
-
-# docker shell scripts for myself
-docker*.sh
