@@ -88,17 +88,16 @@ RUN cd /tmp && git clone https://github.com/msgpack/msgpack-c.git \
 RUN mkdir dev
 
 # Getting sources of an application
-RUN git clone https://github.com/jellythefish/cpp_serialization_methods           \
-  && cd cpp_serialization_methods \
-  && git checkout develop
+RUN git clone https://github.com/jellythefish/cpp_serializers.git \
+  && cd cpp_serializers \
 
 # Building and running
-RUN cd cpp_serialization_methods \
+RUN cd cpp_serializers \
   && mkdir build \
   && cd build \
   && cmake .. \
   && make
-WORKDIR /usr/src/app/cpp_serialization_methods/build
+WORKDIR /usr/src/app/cpp_serializers/build
 
 ENTRYPOINT ["./serialization"]
 CMD ["small", "10"]
