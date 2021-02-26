@@ -30,11 +30,11 @@ int main(int argc, char** argv) {
         throw std::invalid_argument(ss_err.str());
     }
 
-    std::cout << "Generating Data Structure...\r" << std::flush;
+    std::cout << "Generating " << size_argument << " data structure...\r" << std::flush;
 //    DataStruct data_struct = GetSimpleStruct();
     DataStruct data_struct = GenerateStruct(size); // Small/Medium/Large
     Serializer bs(data_struct);
-    std::cout << "Generating Data Structure...OK" << std::endl;
+    std::cout << "Generating " << size_argument << " data structure...OK" << std::endl;
 
     // configuring beautiful output magic :)
     tabulate::Table table_info;
@@ -68,9 +68,9 @@ int main(int argc, char** argv) {
     profile(&Serializer::SerializeAvroToFile, &Serializer::DeserializeAvroFromFile, iter, bs, {"Avro", "File"}, table_info);
     profile(&Serializer::SerializeYAMLToFile, &Serializer::DeserializeYAMLFromFile, iter, bs, {"YAML", "File"}, table_info);
     profile(&Serializer::SerializeMsgPackToFile, &Serializer::DeserializeMsgPackFromFile, iter, bs, {"MsgPack", "File"}, table_info);
+    std::cout << "Serialization finished." << std::endl;
 
     std::cout << table_info << std::endl;
-    std::cout << "Serialization finished." << std::endl;
     return 0;
 }
 
