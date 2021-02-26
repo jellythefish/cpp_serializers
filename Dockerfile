@@ -88,7 +88,7 @@ RUN cd /tmp && git clone https://github.com/msgpack/msgpack-c.git \
 RUN mkdir dev
 
 # Getting sources of an application
-RUN git clone https://github.com/jellythefish/cpp_serialization_methods  \
+RUN git clone https://github.com/jellythefish/cpp_serialization_methods   \
   && cd cpp_serialization_methods \
   && git checkout develop
 
@@ -99,6 +99,6 @@ RUN cd cpp_serialization_methods \
   && cmake .. \
   && make
 WORKDIR /usr/src/app/cpp_serialization_methods/build
-ENV struct_size=small
-ENV iterations=100
+ENV struct_size small
+ENV iterations 100
 CMD ["./serialization ${struct_size} ${iterations}"]
