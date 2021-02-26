@@ -12,7 +12,7 @@ The list of methods:
 + [Apache Avro](http://avro.apache.org/)
 + [MessagePack](https://github.com/msgpack/msgpack-c/tree/cpp_master)
 
-*Binary (Boost) methods of serialization and deserialization were chosen instead of native serialization with C++.
+**Binary (Boost) methods of serialization and deserialization were chosen instead of native serialization with C++.*
 
 As an example of data structure which is serialized and deserialized the following struct was implemented:
 
@@ -74,10 +74,13 @@ cmake ..
 make
 ```
 
+For beautiful output formatting it uses [tabulate](https://github.com/p-ranav/tabulate), but it is fetched and installed via CMake FetchContent.
+
+TODO: to transfer all dependencies installations to CMakeLists.txt.
 
 ### Via Docker
 
-It is much more easier to run docker container with all installed dependencies and uniformed environment inside. 
+It is much more easier to run docker container with all installed dependencies and uniformed environment. 
 
 The [Docker](https://www.docker.com/products/docker-desktop) itself should already be installed in host OS.
 
@@ -88,7 +91,7 @@ There are two ways to get docker image of the application:
 ```bash
 git clone https://github.com/jellythefish/cpp_serializers.git`
 cd cpp_serializers
-docker build . --no-cache -t <image-name>
+docker build . --no-cache -t cpp_serializers
 ```
 
 Building of docker image takes ~30 min on my 32 GB RAM and i5 10600K 5.0 GHz PC. So it's a long way up. 
@@ -109,11 +112,11 @@ Basically, you run application from build directory like:
 ./serialization SIZE ITER
 ```
 
-Where 
+Where, 
 
-SIZE - is the required argument, representing the size of generated data structure. Should be one of **small**, **medium**, **large**. 
+SIZE - is the required argument, representing the size of generated data structure. Should be one of [**small**, **medium**, **large**]. 
 
-ITER - number of serialize/deserialize iterations for each method.
+ITER - is the required argument, representing the number of serialize/deserialize iterations for each method.
 
 For example,
 
@@ -161,7 +164,7 @@ This is an example of the final output produced by application. This table repre
 |          YAML           |    Deserialization    |   RAM    |        51.0047 ms/0.0510047 s         |        2403915 b/2347 Kb/2 Mb        |
 |       MessagePack       |     Serialization     |   RAM    |        7.93109 ms/0.00793108 s        |        2057694 b/2009 Kb/1 Mb        |
 |       MessagePack       |    Deserialization    |   RAM    |        54.7274 ms/0.0547274 s         |        2057694 b/2009 Kb/1 Mb        |
-| ----------------------- | --------------------- | -------- | ------------------------------------- | ------------------------------------ |
+|      -----       |      -----      | ----- |          -----          |         -----          |
 |     Binary (Boost)      |     Serialization     |   File   |        32.8368 ms/0.0328368 s         |        2776024 b/2710 Kb/2 Mb        |
 |     Binary (Boost)      |    Deserialization    |   File   |        76.5447 ms/0.0765447 s         |        2776024 b/2710 Kb/2 Mb        |
 |       XML (Boost)       |     Serialization     |   File   |         75.464 ms/0.075464 s          |        5738610 b/5604 Kb/5 Mb        |
@@ -185,7 +188,7 @@ This is an example of the final output produced by application. This table repre
 
 ### Conclusion
 
-The analysis tables (RAM and File serialization / deserialization) show that Google Protocol Buffers has got minimal relative total time. Also, it has to produce the amount of data 1,10 times larger than Avro and MessagePack what is quite good. So, Protocol Buffers is the best method among others if the low amount of time and memory spent on serialization and deserialization is crucial. On the contrary, never use XML as the serialization and deserialization method in any programming language. It ran out of efficiency nowadays due to it overloaded unnecessary tags.
+The analysis tables (RAM and File serialization/deserialization) show that Google Protocol Buffers has got minimal relative total time. Also, it has to produce the amount of data only 1,10 times larger than Avro and MessagePack what is quite good. So, Protocol Buffers is the best method among others if the low amount of time and memory spent on serialization and deserialization is crucial. On the contrary, never use XML as the serialization and deserialization method in any programming language. It ran out of efficiency nowadays due to its overloaded unnecessary tags.
 
 ### About poor time of YAML
 
@@ -208,4 +211,4 @@ Still, there are some questions to YAML library which makes yaml serialization a
 >   - ryml is in general between **2 and 3 times** faster than [libyaml](https://github.com/yaml/libyaml)
 >   - ryml is in general between **20 and 70 times faster** than [yaml-cpp](https://github.com/jbeder/yaml-cpp), and in some cases as much as 100x and [even 200x](https://github.com/biojppm/c4core/pull/16#issuecomment-700972614) faster.
 
-I failed in search for a faster library as well. It seems like the rapidyaml is the fastest library for serialization and deserialization of yaml in C++ at the moment.
+I failed in search of a faster library as well. It seems like the rapidyaml is the fastest library for yaml  serialization and deserialization in C++ at the moment.
