@@ -10,7 +10,6 @@
 #include <ryml_std.hpp>
 #include <ryml.hpp>
 
-#include <fstream>
 #include <sstream>
 #include <memory>
 
@@ -80,23 +79,17 @@ private:
     std::stringstream ss; // a memory buffer for serialized data
     // TODO to fix this
     std::stringstream pb_ss; // separate for brotobufs, don't know why protobuf ser/deser breaks basic ss
-    std::ofstream ofs; // for serialization to file
-    std::ifstream ifs; // for deserialization from file
 
     std::unique_ptr<avro::OutputStream> avro_os = avro::memoryOutputStream(); // avro output stream
-    std::unique_ptr<avro::InputStream> avro_is;
-    std::unique_ptr<avro::OutputStream> avro_of; // avro output stream
-    std::unique_ptr<avro::InputStream> avro_if; // avro output stream
 
     ryml::Tree tree;
-
-    SerializerType current_type;
-    SerializerMode current_mode;
 
     const DataStruct& data_struct;
     proto::DataStruct ds_message;
 
-    std::string filepath = "../datafiles/";
+    SerializerType current_type;
+    SerializerMode current_mode;
+    const std::string filepath = "../datafiles/";
     std::string filename; // is defined in class methods
 };
 

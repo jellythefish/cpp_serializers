@@ -1,6 +1,8 @@
 #include "boost_serializer.hpp"
 #include "serializer.hpp"
 
+#include <fstream>
+
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
@@ -72,14 +74,13 @@ void Serializer::SerializeBinaryToFile() {
     current_type = SerializerType::Binary;
     current_mode = SerializerMode::File;
     filename = "demofile.bin";
-    ofs.open((filepath + filename).c_str(), std::ios::binary);
+    std::ofstream ofs((filepath + filename).c_str(), std::ios::binary);
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::binary_oarchive oa(ofs);
         oa << data_struct;
     }
-    ofs.close(); // closing ofs, as ofs and ifs are class attributes which are out of scope of class methods
 }
 
 void Serializer::DeserializeBinaryFromFile() {
@@ -87,28 +88,26 @@ void Serializer::DeserializeBinaryFromFile() {
     current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.bin";
-    ifs.open((filepath + filename).c_str(), std::ios::binary);
+    std::ifstream ifs((filepath + filename).c_str(), std::ios::binary);
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::binary_iarchive ia(ifs);
         ia >> data_struct_new;
     }
-    ifs.close();
 }
 
 void Serializer::SerializeXMLToFile() {
     current_type = SerializerType::XML;
     current_mode = SerializerMode::File;
     filename = "demofile.xml";
-    ofs.open((filepath + filename).c_str());
+    std::ofstream ofs((filepath + filename).c_str());
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::xml_oarchive oa(ofs);
         oa << BOOST_SERIALIZATION_NVP(data_struct);
     }
-    ofs.close();
 }
 
 void Serializer::DeserializeXMLFromFile() {
@@ -116,28 +115,26 @@ void Serializer::DeserializeXMLFromFile() {
     current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.xml";
-    ifs.open((filepath + filename).c_str());
+    std::ifstream ifs((filepath + filename).c_str());
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::xml_iarchive ia(ifs);
         ia >> BOOST_SERIALIZATION_NVP(data_struct_new);
     }
-    ifs.close();
 }
 
 void Serializer::SerializeTextToFile() {
     current_type = SerializerType::Text;
     current_mode = SerializerMode::File;
     filename = "demofile.txt";
-    ofs.open((filepath + filename).c_str());
+    std::ofstream ofs((filepath + filename).c_str());
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::text_oarchive oa(ofs);
         oa << data_struct;
     }
-    ofs.close();
 }
 
 void Serializer::DeserializeTextFromFile() {
@@ -145,12 +142,11 @@ void Serializer::DeserializeTextFromFile() {
     current_mode = SerializerMode::File;
     DataStruct data_struct_new;
     filename = "demofile.txt";
-    ifs.open((filepath + filename).c_str());
+    std::ifstream ifs((filepath + filename).c_str());
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     {
         boost::archive::text_iarchive ia(ifs);
         ia >> data_struct_new;
     }
-    ifs.close();
 }

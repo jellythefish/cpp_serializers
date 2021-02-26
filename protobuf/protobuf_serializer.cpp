@@ -1,5 +1,7 @@
 #include "serializer.hpp"
 
+#include <fstream>
+
 #include "data_struct.pb.h"
 
 void Serializer::SerializeProtobuf() {
@@ -20,21 +22,20 @@ void Serializer::SerializeProtobufToFile() {
     current_type = SerializerType::Protobuf;
     current_mode = SerializerMode::File;
     filename = "demofile.pb";
-    ofs.open((filepath + filename).c_str(), std::ios::binary);
+    std::ofstream ofs((filepath + filename).c_str(), std::ios::binary);
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     ds_message.SerializeToOstream(&ofs);
-    ofs.close();
 }
 
 void Serializer::DeserializeProtobufFromFile() {
     current_type = SerializerType::Protobuf;
     current_mode = SerializerMode::File;
-    proto::DataStruct ds_message_new;
     filename = "demofile.pb";
-    ifs.open((filepath + filename).c_str(), std::ios::binary);
-    if (!ifs.is_open())
+    std::ifstream ifs((filepath + filename).c_str(), std::ios::binary);
+    if (!ifs.is_open()) {
         throw std::runtime_error("Cannot open " + filename);
+    }
+    proto::DataStruct ds_message_new;
     ds_message_new.ParseFromIstream(&ifs);
-    ifs.close();
 }

@@ -1,13 +1,13 @@
 #include "serializer.hpp"
 #include "boost_json.hpp"
 
-#include <iostream>
+#include <fstream>
 
 void Serializer::SerializeJSON() {
     current_type = SerializerType::JSON;
     current_mode = SerializerMode::RAM;
-    json::value jv = json::value_from(data_struct);
     ss.str(""); // clearing string stream buffer 0 ms time
+    json::value jv = json::value_from(data_struct);
     ss << jv;
 }
 
@@ -22,19 +22,18 @@ void Serializer::SerializeJSONToFile() {
     current_type = SerializerType::JSON;
     current_mode = SerializerMode::File;
     filename = "demofile.json";
-    ofs.open((filepath + filename).c_str());
+    std::ofstream ofs((filepath + filename).c_str());
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     json::value v = json::value_from(data_struct);
     ofs << v;
-    ofs.close(); // closing ofs, as ofs and ifs are class attributes wh
 }
 
 void Serializer::DeserializeJSONFromFile() {
     current_type = SerializerType::JSON;
     current_mode = SerializerMode::File;
     filename = "demofile.json";
-    ifs.open((filepath + filename).c_str());
+    std::ifstream ifs((filepath + filename).c_str());
     if (!ifs.is_open()) {
         throw std::runtime_error("Cannot open " + filename);
     }
@@ -42,6 +41,6 @@ void Serializer::DeserializeJSONFromFile() {
     // and call implemented DeserializeJSON()
     ss.str("");
     ss << ifs.rdbuf();
-    DeserializeJSON();
-    ifs.close();
+    json::value jv = json::parse(ss.str());
+    DataStruct data_struct_new(json::value_to<DataStruct>(jv));
 }

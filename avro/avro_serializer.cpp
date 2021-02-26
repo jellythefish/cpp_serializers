@@ -23,7 +23,7 @@ void Serializer::SerializeAvro() {
 void Serializer::DeserializeAvro() {
     current_type = SerializerType::Avro;
     current_mode = SerializerMode::RAM;
-    avro_is = avro::memoryInputStream(*avro_os);
+    std::unique_ptr<avro::InputStream> avro_is = avro::memoryInputStream(*avro_os);
     avro::DecoderPtr d = avro::binaryDecoder();
     d->init(*avro_is);
 
@@ -35,7 +35,7 @@ void Serializer::SerializeAvroToFile() {
     current_type = SerializerType::Avro;
     current_mode = SerializerMode::File;
     filename = "demofile.avro";
-    avro_of = avro::fileOutputStream((filepath + filename).c_str());
+    std::unique_ptr<avro::OutputStream> avro_of = avro::fileOutputStream((filepath + filename).c_str());
     avro::EncoderPtr e = avro::binaryEncoder();
     e->init(*avro_of);
     avro::encode(*e, data_struct);
@@ -46,7 +46,7 @@ void Serializer::DeserializeAvroFromFile() {
     current_type = SerializerType::Avro;
     current_mode = SerializerMode::File;
     filename = "demofile.avro";
-    avro_if = avro::fileInputStream((filepath + filename).c_str());
+    std::unique_ptr<avro::InputStream> avro_if = avro::fileInputStream((filepath + filename).c_str());
     avro::DecoderPtr d = avro::binaryDecoder();
     d->init(*avro_if);
 

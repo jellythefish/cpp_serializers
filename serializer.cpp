@@ -1,6 +1,6 @@
 #include "serializer.hpp"
 
-#include <sstream>
+#include <fstream>
 
 Serializer::Serializer(const DataStruct& data_struct) :
     data_struct(data_struct),

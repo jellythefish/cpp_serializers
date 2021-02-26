@@ -1,5 +1,7 @@
 #include <msgpack.hpp>
 
+#include <fstream>
+
 #include "serializer.hpp"
 
 void Serializer::SerializeMsgPack() {
@@ -7,7 +9,6 @@ void Serializer::SerializeMsgPack() {
     current_mode = SerializerMode::RAM;
     ss.str("");
     msgpack::pack(ss, data_struct);
-    ss.seekg(0);
 }
 
 void Serializer::DeserializeMsgPack() {
@@ -23,18 +24,17 @@ void Serializer::SerializeMsgPackToFile() {
     current_type = SerializerType::MsgPack;
     current_mode = SerializerMode::File;
     filename = "demofile.msgp";
-    ofs.open((filepath + filename).c_str(), std::ios::binary);
+    std::ofstream ofs((filepath + filename).c_str(), std::ios::binary);
     if (!ofs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     msgpack::pack(ofs, data_struct);
-    ofs.close();
 }
 
 void Serializer::DeserializeMsgPackFromFile() {
     current_type = SerializerType::MsgPack;
     current_mode = SerializerMode::File;
     filename = "demofile.msgp";
-    ifs.open((filepath + filename).c_str(), std::ios::binary);
+    std::ifstream ifs((filepath + filename).c_str(), std::ios::binary);
     if (!ifs.is_open())
         throw std::runtime_error("Cannot open " + filename);
     std::stringstream buffer;
@@ -43,6 +43,4 @@ void Serializer::DeserializeMsgPackFromFile() {
     msgpack::object_handle oh = msgpack::unpack(str.data(), str.size());
     msgpack::object deserialized = oh.get();
     DataStruct data_struct_new = deserialized.as<DataStruct>();
-    ifs.close();
-    std::cout << data_struct_new.str << std::endl;
 }
