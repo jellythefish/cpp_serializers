@@ -87,15 +87,14 @@ RUN cd /tmp && git clone https://github.com/msgpack/msgpack-c.git \
 # A folder for developing and debbuging: for adding volume of sources in host project folder
 RUN mkdir dev
 
-# Getting sources of an application
+# Getting sources of an application, building and running
 RUN git clone https://github.com/jellythefish/cpp_serializers.git \
-  && cd cpp_serializers
-
-# Building and running
-RUN mkdir build \
+  && cd cpp_serializers \
+  && mkdir build \
   && cd build \
   && cmake .. \
   && make
+
 WORKDIR /usr/src/app/cpp_serializers/build
 
 ENTRYPOINT ["./serialization"]
