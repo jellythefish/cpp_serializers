@@ -78,7 +78,7 @@ public:
 private:
     std::stringstream ss; // a memory buffer for serialized data
 
-    std::unique_ptr<avro::OutputStream> avro_os = avro::memoryOutputStream(); // avro output stream
+    std::unique_ptr<avro::OutputStream> avro_os; // avro output stream
 
     ryml::Tree tree;
 
