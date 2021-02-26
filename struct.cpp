@@ -1,51 +1,55 @@
 #include "struct.hpp"
+#include "util/util.hpp"
 
 #include <ctime>
 #include <iostream>
 #include <climits>
 
-std::string GenerateRandomString(size_t size) {
+std::string GenerateRandomString(size_t size, Randomizer& randomizer) {
     std::string res;
     for (size_t i = 0; i < size; ++i) {
-        char c = (char) ('a' + rand() % 26); // random char from ascii 97 - 'a' to 122 - 'z'
+        char c = (char) ('a' + randomizer.GetRandInt() % 26); // random char from ascii 97 - 'a' to 122 - 'z'
         res += c;
     }
     return res;
 }
 
-void FillVector(std::vector<int>& v, size_t vec_size) {
+void FillVector(std::vector<int>& v, size_t vec_size, Randomizer& randomizer) {
     for (size_t i = 0; i < vec_size; ++i) {
-        v.push_back(rand() % INT_MAX);
+        v.push_back(randomizer.GetRandInt() % INT_MAX);
     }
 }
 
-void FillMap(std::map<std::string, std::string>& m, size_t map_size, size_t string_size) {
+void FillMap(std::map<std::string, std::string>& m, size_t map_size, size_t string_size,
+             Randomizer& randomizer) {
     for (size_t i = 0; i < map_size; ++i) {
-        m[GenerateRandomString(string_size)] = GenerateRandomString(string_size);
+        m[GenerateRandomString(string_size, randomizer)] = GenerateRandomString(string_size, randomizer);
     }
 }
 
 void FillMapMap(std::map<std::string, std::map<std::string, int>>& m,
-                size_t map_size, size_t nested_map_size, size_t string_size) {
+                size_t map_size, size_t nested_map_size, size_t string_size,
+                Randomizer& randomizer) {
     for (size_t i = 0; i < map_size; ++i) {
         std::map<std::string, int> p;
         for (size_t j = 0; j < nested_map_size; ++j) {
-            p[GenerateRandomString(string_size)] = rand() % INT_MAX;
+            p[GenerateRandomString(string_size, randomizer)] = randomizer.GetRandInt() % INT_MAX;
         }
-        m[GenerateRandomString(string_size)] = p;
+        m[GenerateRandomString(string_size, randomizer)] = p;
     }
 }
 
 void FillMapVectorMap(std::map<std::string, std::vector<std::map<std::string, std::string>>>& m,
-                      size_t map_size, size_t vector_size, size_t second_map_size, size_t string_size) {
+                      size_t map_size, size_t vector_size, size_t second_map_size, size_t string_size,
+                      Randomizer& randomizer) {
     for (size_t i = 0; i < map_size; ++i) {
         std::vector<std::map<std::string, std::string>> v;
         for (size_t j = 0; j < vector_size; ++j) {
             std::map<std::string, std::string> second_map;
-            FillMap(second_map, second_map_size, string_size);
+            FillMap(second_map, second_map_size, string_size, randomizer);
             v.push_back(second_map);
         }
-        m[GenerateRandomString(string_size)] = v;
+        m[GenerateRandomString(string_size, randomizer)] = v;
     }
 }
 
@@ -90,8 +94,7 @@ DataStruct GetSimpleStruct() {
 }
 
 DataStruct GenerateStruct(StructSize size) {
-    // TODO: to change randomization method later
-    srand(time(nullptr)); // use current time as seed for random generator
+    Randomizer randomizer;
     DataStruct data_struct;
     data_struct.str = "Test string: Hello From Slava!";
     data_struct.int_num = 42;
@@ -104,10 +107,10 @@ DataStruct GenerateStruct(StructSize size) {
     } else {
         string_size = 200, vec_size = 200, map_size = 100, nested_map_size = 50;
     }
-    FillVector(data_struct.v_int, vec_size);
-    FillMap(data_struct.map_str_str, map_size, string_size);
-    FillMapMap(data_struct.map_map, map_size, nested_map_size, string_size);
-    FillMapVectorMap(data_struct.map_vector_map, map_size, vec_size, nested_map_size, string_size);
+    FillVector(data_struct.v_int, vec_size, randomizer);
+    FillMap(data_struct.map_str_str, map_size, string_size, randomizer);
+    FillMapMap(data_struct.map_map, map_size, nested_map_size, string_size, randomizer);
+    FillMapVectorMap(data_struct.map_vector_map, map_size, vec_size, nested_map_size, string_size, randomizer);
     return data_struct;
 }
 

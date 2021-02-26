@@ -16,6 +16,7 @@ set(AVRO_SER avro/avro_serializer.cpp)
 set(YAML_SER yaml/yaml_serializer.cpp)
 set(MSGPACK_SER message_pack/msgpack_serializer.cpp)
 set(PROFILER util/profiler.cpp)
+set(RANDOMIZER util/randomizer.cpp)
 
 # importing Tabulate for pretty-printing results
 include(FetchContent)
@@ -59,7 +60,7 @@ include_directories("/usr/local/include/msgpack")
 
 add_executable(${PROJECT_NAME} ${SOURCE}
         ${BOOST_SER} ${BOOST_JSON} ${PROTOBUF} ${PROTO_SRCS} ${PROTO_HDRS}
-        ${AVRO_SER} ${YAML_SER} ${MSGPACK_SER} ${PROFILER})
+        ${AVRO_SER} ${YAML_SER} ${MSGPACK_SER} ${PROFILER} ${RANDOMIZER})
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${Protobuf_LIBRARIES}
         Avro YAML)
