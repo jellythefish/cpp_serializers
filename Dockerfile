@@ -89,11 +89,10 @@ RUN mkdir dev
 
 # Getting sources of an application
 RUN git clone https://github.com/jellythefish/cpp_serializers.git \
-  && cd cpp_serializers \
+  && cd cpp_serializers
 
 # Building and running
-RUN cd cpp_serializers \
-  && mkdir build \
+RUN mkdir build \
   && cd build \
   && cmake .. \
   && make
