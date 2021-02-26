@@ -1,0 +1,2 @@
+This is an example of file in directory where other serialized
+files will be stored

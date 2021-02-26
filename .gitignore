@@ -1,0 +1,11 @@
+.idea/
+
+cmake-build-debug/
+build/
+
+# files of serialized data
+datafiles/demofile*
+
+# protobufs stubs
+*.pb.cc
+*.ph.h
