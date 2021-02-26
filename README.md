@@ -89,7 +89,7 @@ There are two ways to get docker image of the application:
 #### Build from Dockerfile
 
 ```bash
-git clone https://github.com/jellythefish/cpp_serializers.git`
+git clone https://github.com/jellythefish/cpp_serializers.git
 cd cpp_serializers
 docker build . --no-cache -t cpp_serializers
 ```
