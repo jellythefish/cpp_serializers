@@ -6,8 +6,10 @@
 #include "util/util.hpp"
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        throw std::invalid_argument("Wrong number of arguments.");
+    std::stringstream ss_err;
+    if (argc != 3) {
+        ss_err << "Wrong number of arguments: expected 3, but provided " << argc;
+        throw std::invalid_argument(ss_err.str());
     }
     std::string size_argument = argv[1];
     StructSize size;
@@ -18,7 +20,14 @@ int main(int argc, char** argv) {
     } else if (size_argument == "large") {
         size = StructSize::Large;
     } else {
-        throw std::invalid_argument("Size argument is invalid.");
+        ss_err << "Size argument is invalid: " << size_argument;
+        throw std::invalid_argument(ss_err.str());
+    }
+    errno = 0; char* endptr;
+    long int iter = strtol(argv[2], &endptr, 10); // number of iterations for serialization and deserialization for each method
+    if (endptr == argv[2] || *endptr || errno == ERANGE || iter <= 0) {
+        ss_err << "Invalid number of iterations: " << argv[2];
+        throw std::invalid_argument(ss_err.str());
     }
 
     std::cout << "Generating Data Structure...\r" << std::flush;
@@ -39,44 +48,27 @@ int main(int argc, char** argv) {
             .font_background_color(tabulate::Color::white);
     }
 
-    std::cout << "Serialization running...\r" << std::flush;
-    profile(&Serializer::SerializeBinary, bs, {"Binary\n(Boost)", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeBinary, bs, {"Binary\n(Boost)", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeXML, bs, {"XML", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeXML, bs, {"XML", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeText, bs, {"Raw text", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeText, bs, {"Raw text", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeJSON, bs, {"JSON", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeJSON, bs, {"JSON", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeProtobuf, bs, {"Protobuf", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeProtobuf, bs, {"Protobuf", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeAvro, bs, {"Avro", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeAvro, bs, {"Avro", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeYAML, bs, {"YAML", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeYAML, bs, {"YAML", "Deserialization", "RAM"}, table_info);
-    profile(&Serializer::SerializeMsgPack, bs, {"MsgPack", "Serialization", "RAM"}, table_info);
-    profile(&Serializer::DeserializeMsgPack, bs, {"MsgPack", "Deserialization", "RAM"}, table_info);
+    std::cout << "Serialization running..." << std::endl;
+    profile(&Serializer::SerializeBinary, &Serializer::DeserializeBinary, iter, bs, {"Binary (Boost)", "RAM"}, table_info);
+    profile(&Serializer::SerializeXML, &Serializer::DeserializeXML, iter, bs, {"XML", "RAM"}, table_info);
+    profile(&Serializer::SerializeText, &Serializer::DeserializeText, iter, bs, {"Raw text", "RAM"}, table_info);
+    profile(&Serializer::SerializeJSON, &Serializer::DeserializeJSON, iter, bs, {"JSON", "RAM"}, table_info);
+    profile(&Serializer::SerializeProtobuf, &Serializer::DeserializeProtobuf, iter, bs, {"Protobuf", "RAM"}, table_info);
+    profile(&Serializer::SerializeAvro, &Serializer::DeserializeAvro, iter, bs, {"Avro", "RAM"}, table_info);
+    profile(&Serializer::SerializeYAML, &Serializer::DeserializeYAML, iter, bs, {"YAML", "RAM"}, table_info);
+    profile(&Serializer::SerializeMsgPack, &Serializer::DeserializeMsgPack, iter, bs, {"MsgPack", "RAM"}, table_info);
 
     table_info.add_row({"-----------","---------------","---------","---------------------","----------------------"});
 
-    profile(&Serializer::SerializeBinaryToFile, bs, {"Binary\n(Boost)", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeBinaryFromFile, bs, {"Binary\n(Boost)", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeXMLToFile, bs, {"XML", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeXMLFromFile, bs, {"XML", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeTextToFile, bs, {"Raw text", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeTextFromFile, bs, {"Raw text", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeJSONToFile, bs,{"JSON", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeJSONFromFile, bs,{"JSON", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeProtobufToFile, bs, {"Protobuf", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeProtobufFromFile, bs, {"Protobuf", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeAvroToFile, bs, {"Avro", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeAvroFromFile, bs, {"Avro", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeYAMLToFile, bs, {"YAML", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeYAMLFromFile, bs, {"YAML", "Deserialization", "File"}, table_info);
-    profile(&Serializer::SerializeMsgPackToFile, bs, {"MsgPack", "Serialization", "File"}, table_info);
-    profile(&Serializer::DeserializeMsgPackFromFile, bs, {"MsgPack", "Deserialization", "File"}, table_info);
-    // TODO to implement progress bar
-    std::cout << "Serialization running...OK" << std::endl;
+    profile(&Serializer::SerializeBinaryToFile, &Serializer::DeserializeBinaryFromFile, iter, bs, {"Binary (Boost)", "File"}, table_info);
+    profile(&Serializer::SerializeXMLToFile, &Serializer::DeserializeXMLFromFile, iter, bs, {"XML", "File"}, table_info);
+    profile(&Serializer::SerializeTextToFile, &Serializer::DeserializeTextFromFile, iter, bs, {"Raw text", "File"}, table_info);
+    profile(&Serializer::SerializeJSONToFile, &Serializer::DeserializeJSONFromFile, iter, bs,{"JSON", "File"}, table_info);
+    profile(&Serializer::SerializeProtobufToFile, &Serializer::DeserializeProtobufFromFile, iter, bs, {"Protobuf", "File"}, table_info);
+    profile(&Serializer::SerializeAvroToFile, &Serializer::DeserializeAvroFromFile, iter, bs, {"Avro", "File"}, table_info);
+    profile(&Serializer::SerializeYAMLToFile, &Serializer::DeserializeYAMLFromFile, iter, bs, {"YAML", "File"}, table_info);
+    profile(&Serializer::SerializeMsgPackToFile, &Serializer::DeserializeMsgPackFromFile, iter, bs, {"MsgPack", "File"}, table_info);
+
     std::cout << table_info << std::endl;
     std::cout << "Serialization finished." << std::endl;
     return 0;

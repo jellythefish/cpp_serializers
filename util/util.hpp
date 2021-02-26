@@ -8,11 +8,11 @@
 
 struct Entry {
     std::string type;
-    std::string operation;
     std::string place;
 };
 
-void profile(void (Serializer::*function)(), Serializer& obj, const Entry& e, tabulate::Table& t);
+void profile(void (Serializer::*ser_func)(), void (Serializer::*deser_func)(), long int iter,
+             Serializer& obj, const Entry& e, tabulate::Table& t);
 
 class Randomizer {
 public:
